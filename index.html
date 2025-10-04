@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Carta Para Ti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Dancing Script', cursive;
+            /* Hide scrollbars during animation */
+            overflow: hidden; 
+        }
+
+        /* The envelope wrapper to create a 3D perspective */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        /* The envelope itself */
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background-color: #f8bbd0; /* Lighter pink */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform-style: preserve-3d;
+            /* Added transition for the fade-out effect and vertical centering */
+            transition: transform 0.8s ease-in-out 0.8s, background-color 0.5s ease-in-out 1.5s, box-shadow 0.5s ease-in-out 1.5s;
+        }
+
+        @media (min-width: 768px) {
+            .envelope {
+                width: 450px;
+                height: 300px;
+            }
+        }
+
+        /* The flap of the envelope */
+        .flap {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            top: 0;
+            left: 0;
+            background-color: #f48fb1; /* Darker pink */
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: bottom;
+            z-index: 3;
+            opacity: 1;
+            /* Added opacity to the transition for the fade-out */
+            transition: transform 0.8s ease-in-out 0.5s, opacity 0.5s ease-in-out 1.5s;
+        }
+
+        /* The letter inside */
+        .letter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1) inset;
+            z-index: 1;
+            transform: translateY(0);
+            /* Allow scrolling if content is too long */
+            overflow-y: auto; 
+             /* Added a delay to the letter animation */
+            transition: transform 0.8s ease-in-out 0.8s, box-shadow 0.8s 0.8s;
+        }
+        
+        /* Animation for opening the envelope */
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            /* Make the flap invisible after opening */
+            opacity: 0;
+        }
+
+        .envelope.open {
+            /* Make the envelope body transparent after opening */
+            background-color: transparent;
+            box-shadow: none;
+            /* Move the wrapper down to re-center the letter after animation */
+            transform: translateY(100px);
+        }
+
+        .envelope.open .letter {
+            /* Pull the letter up */
+            transform: translateY(-130px); 
+            box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+        }
+        
+        @media (min-width: 768px) {
+            .envelope.open {
+                /* Larger downward translation for desktop */
+                transform: translateY(130px);
+            }
+            .envelope.open .letter {
+                transform: translateY(-180px); 
+            }
+        }
+    </style>
+</head>
+<body class="bg-rose-50 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Envelope -->
+    <div class="envelope-wrapper">
+        <div id="envelope" class="envelope">
+            <div class="flap"></div>
+            <div class="letter">
+                <!-- Contenido de la carta original -->
+                <div class="text-gray-800">
+                    <p class="text-xl md:text-2xl leading-relaxed mb-4">
+                        ¿Sabes cómo me enamoraste? Simplemente siendo tú. Aunque a veces no me entiendas, sé que contigo mis proyectos de vida son logrables. Allanaste el camino de una persona que no tenía rumbo.
+                    </p>
+                    <p class="text-xl md:text-2xl leading-relaxed mb-4">
+                        Te amo y me gustas demasiado. Soy inmensamente feliz cuando estoy contigo y no cambiaría un solo segundo a tu lado ni por todo el dinero del mundo. Contigo, hasta limpiar miel de whisky se convierte en un momento feliz.
+                    </p>
+                    <p class="text-xl md:text-2xl leading-relaxed mb-4">
+                        A tu lado, la incomodidad desaparece, porque como dice la pulsera: tú representas mi felicidad.
+                    </p>
+                    <p class="text-xl md:text-2xl leading-relaxed mb-4">
+                        Y si me dices que nos casemos, ¿sabes por qué no tengo fecha? Porque aunque aún no tengas un anillo, para mí ya estamos casados. Quiero hacer siempre las cosas bien y disfrutar todo el tiempo del mundo contigo.
+                    </p>
+                    <p class="text-2xl md:text-3xl font-bold text-center text-rose-500 mt-6">
+                        Quiero ser tu "verbo to be" y tu "upracha".
+                    </p>
+                    <div class="text-center mt-6">
+                        <svg class="w-8 h-8 text-rose-400 inline-block" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para la animación de abrir automáticamente
+        window.addEventListener('load', () => {
+            const envelope = document.getElementById('envelope');
+            // Agrega la clase 'open' para iniciar la animación
+            envelope.classList.add('open');
+
+            // Permite el scroll de nuevo una vez que la animación principal ha terminado
+            setTimeout(() => {
+                document.body.style.overflow = 'auto';
+            }, 2000); // 2 segundos de espera
+        });
+    </script>
+
+</body>
+</html>
+
+
